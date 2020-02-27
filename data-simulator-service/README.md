@@ -12,3 +12,9 @@ and exposes over REST. Protocol used is HTTP.
 ### Default credentials
 - username: admin
 - password: admin
+
+## Packaging
+mvn package
+
+## Running
+docker run -d --rm -p 8080:8080 --name simulator data-simulator-service:0.0.1-SNAPSHOT
