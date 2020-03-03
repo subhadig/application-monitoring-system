@@ -1,13 +1,13 @@
-package org.subhadig.ams.datasimulatorservice;
+package org.subhadig.ams.dataproviderservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DataSimulatorServiceApplication {
+public class DataProviderServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DataSimulatorServiceApplication.class, args);
+		SpringApplication.run(DataProviderServiceApplication.class, args);
 	}
 
 }
