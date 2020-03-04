@@ -1,8 +1,8 @@
 package org.subhadig.ams.datacollectionservice.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("data-collection-configs")
 public class DataCollectionConfigController {
+	
+	@Autowired
+	private DataCollectionConfigRepository configRepository;
 
 	@GetMapping("")
 	public List<DataCollectionConfig> getAllConfigs() {
-		return new ArrayList<DataCollectionConfig>();
+		return configRepository.findAll();
 	}
 }
