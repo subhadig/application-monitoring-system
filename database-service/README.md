@@ -6,4 +6,4 @@
 docker build -t database-service:latest .
 
 # Running
-docker run -d --rm --name db database-service:latest
+docker run -d --rm -p 27017:27017 --name db database-service:latest

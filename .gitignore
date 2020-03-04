@@ -30,3 +30,9 @@ bin
 
 # Maven files and directories
 target
+
+# Vim temp files
+*.swp
+
+# MacOS temp files
+.DS_Store

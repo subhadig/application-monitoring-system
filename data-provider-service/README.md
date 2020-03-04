@@ -15,6 +15,7 @@ and exposes over REST. Protocol used is HTTP.
 
 ## Packaging
 mvn package
+docker build -t data-provider-service:latest --build-arg jarfile="target/data-provider-service-*.jar" .
 
 ## Running
 docker run -d --rm -p 8080:8080 --name provider data-provider-service:0.0.1-SNAPSHOT
