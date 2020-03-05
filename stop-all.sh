@@ -1,6 +1,6 @@
 #!/bin/sh
 
-function log
+log()
 {
     echo "\n[stop-all] $1"
 }
