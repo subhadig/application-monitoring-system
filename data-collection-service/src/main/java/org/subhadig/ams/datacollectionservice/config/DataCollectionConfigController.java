@@ -34,7 +34,8 @@ public class DataCollectionConfigController {
 	public DataCollectionConfig getConfig(String id) {
 		Optional<DataCollectionConfig> fetchedConfig = configRepository.findById(id);
 		return fetchedConfig.orElseThrow(
-				() -> new DataCollectionConfigNotFoundException(id + " is not available"));
+				() -> new DataCollectionConfigNotFoundException(
+						String.format("Config with id %s is not available", id)));
 	}
 	
 	@PostMapping()
