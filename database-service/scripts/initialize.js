@@ -1,2 +1,2 @@
 db = new Mongo().getDB("ams");
-db.createCollection("dcs");
+db.createCollection("data-collection-config");
