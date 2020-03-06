@@ -1,9 +1,9 @@
 package org.subhadig.ams.datacollectionservice.config;
 
 /**
- * @author subhadip
+ * @author subhadig.github
  */
 public enum SourceType {
 
-	SpringActuator
+    SpringActuator
 }

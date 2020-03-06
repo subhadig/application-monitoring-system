@@ -14,21 +14,24 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * @author subhadig@github
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
-	private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES = new HashSet<String>(
-			Arrays.asList(MediaType.APPLICATION_JSON.toString()));
+    private static final Set<String> DEFAULT_PRODUCES_AND_CONSUMES = new HashSet<String>(
+            Arrays.asList(MediaType.APPLICATION_JSON.toString()));
 
-	@Bean
-	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2)
-				.apiInfo(ApiInfo.DEFAULT)
-				.produces(DEFAULT_PRODUCES_AND_CONSUMES)
-				.consumes(DEFAULT_PRODUCES_AND_CONSUMES)
-				.select()
-				.apis(RequestHandlerSelectors.basePackage("org.subhadig.ams.datacollectionservice"))
-				.build();
-	}
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(ApiInfo.DEFAULT)
+                .produces(DEFAULT_PRODUCES_AND_CONSUMES)
+                .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("org.subhadig.ams.datacollectionservice"))
+                .build();
+    }
 }
