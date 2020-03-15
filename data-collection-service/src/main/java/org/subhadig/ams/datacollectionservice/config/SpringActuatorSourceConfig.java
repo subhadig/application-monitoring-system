@@ -4,7 +4,7 @@ package org.subhadig.ams.datacollectionservice.config;
  * @author subhadig@github
  *
  */
-public class SpringActuatorSourceConfig implements SourceConfiguration {
+public class SpringActuatorSourceConfig extends PolledSourceConfig {
 
     private String ipAddress;
     

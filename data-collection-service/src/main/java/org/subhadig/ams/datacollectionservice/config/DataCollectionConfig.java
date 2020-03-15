@@ -19,7 +19,7 @@ public class DataCollectionConfig {
     
     private DestinationType destination;
     
-    private SourceConfiguration sourceConfig;
+    private SourceConfig sourceConfig;
 
     public DataCollectionConfig() {
         //Default constructor
@@ -49,11 +49,11 @@ public class DataCollectionConfig {
         this.destination = destination;
     }
 
-    public SourceConfiguration getSourceConfig() {
+    public SourceConfig getSourceConfig() {
         return sourceConfig;
     }
 
-    public void setSourceConfig(SourceConfiguration sourceConfig) {
+    public void setSourceConfig(SourceConfig sourceConfig) {
         this.sourceConfig = sourceConfig;
     }
 }
