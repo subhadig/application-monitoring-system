@@ -1,4 +1,4 @@
-package org.subhadig.ams.datacollectionservice.config;
+package org.subhadig.ams.datacollectionservice.config.source;
 
 /**
  * @author subhadig@github

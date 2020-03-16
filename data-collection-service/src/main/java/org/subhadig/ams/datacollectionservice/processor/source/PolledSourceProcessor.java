@@ -4,7 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.subhadig.ams.datacollectionservice.config.PolledSourceConfig;
+import org.subhadig.ams.datacollectionservice.config.source.PolledSourceConfig;
 
 public abstract class PolledSourceProcessor extends SourceProcessor {
     

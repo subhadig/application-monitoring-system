@@ -2,6 +2,9 @@ package org.subhadig.ams.datacollectionservice.config;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.subhadig.ams.datacollectionservice.config.destination.DestinationType;
+import org.subhadig.ams.datacollectionservice.config.source.SourceConfig;
+import org.subhadig.ams.datacollectionservice.config.source.SourceType;
 
 /**
  * This class holds the DataCollection
