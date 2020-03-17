@@ -4,6 +4,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.subhadig.ams.datacollectionservice.config.source.PolledSourceConfig;
 
@@ -13,17 +15,61 @@ public abstract class PolledSourceProcessor extends SourceProcessor {
     
     ScheduledFuture<?> scheduledFuture;
     
+    Lock lock = new ReentrantLock();
+    
+    private static final int TIMEOUT_IN_MS = 5000;
+    
     @Override
     public void start() {
-        LOGGER.info("Starting the polling");
-        executorService = createExecutorService();
-        schedulePoll();
+        try {
+            if(!lock.tryLock(TIMEOUT_IN_MS, TimeUnit.MILLISECONDS)) {
+                LOGGER.error("Unable to acquire lock.");
+                return;
+            }
+        } catch (InterruptedException e) {
+            LOGGER.warn("Interrupted while waiting for lock");
+            Thread.currentThread().interrupt();
+        }
+        
+        try {
+            if(executorService == null) {
+                LOGGER.info("Starting polling");
+                executorService = createExecutorService();
+                schedulePoll();
+            } else {
+                LOGGER.warn("Already started.");
+            }
+        } finally {
+            lock.unlock();
+        }
     }
     
     @Override
     public void stop() {
-        executorService.shutdown();
-        executorService = null;
+        try {
+            if(!lock.tryLock(TIMEOUT_IN_MS, TimeUnit.MILLISECONDS)) {
+                LOGGER.error("Unable to acquire lock.");
+                return;
+            }
+        } catch (InterruptedException e) {
+            LOGGER.warn("Interrupted while waiting for lock");
+            Thread.currentThread().interrupt();
+        }
+        
+        try {
+            if(executorService == null) {
+                LOGGER.warn("Already stopped.");
+            } else {
+                LOGGER.info("Stopping polling");
+                if(scheduledFuture != null) {
+                    scheduledFuture.cancel(true);
+                }
+                executorService.shutdown();
+                executorService = null;
+            }
+        } finally {
+            lock.unlock();
+        }
     }
     
     ScheduledExecutorService createExecutorService() {
