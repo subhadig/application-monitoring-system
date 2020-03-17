@@ -2,13 +2,21 @@ package org.subhadig.ams.datacollectionservice.config.source;
 
 public abstract class PolledSourceConfig extends SourceConfig {
     
-    private int pollInterval;
+    private long pollInterval;
 
-    public int getPollInterval() {
+    /**
+     * Get poll interval in milliseconds
+     * @return
+     */
+    public long getPollInterval() {
         return pollInterval;
     }
 
-    public void setPollInterval(int pollInterval) {
+    /**
+     * Set poll interval in milliseconds
+     * @param pollInterval
+     */
+    public void setPollInterval(long pollInterval) {
         this.pollInterval = pollInterval;
     }
 }

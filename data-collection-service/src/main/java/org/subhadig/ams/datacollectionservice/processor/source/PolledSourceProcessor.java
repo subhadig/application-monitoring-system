@@ -8,20 +8,25 @@ import org.subhadig.ams.datacollectionservice.config.source.PolledSourceConfig;
 
 public abstract class PolledSourceProcessor extends SourceProcessor {
     
-    private ScheduledExecutorService executorService;
+    ScheduledExecutorService executorService;
     
     public PolledSourceProcessor() {
     }
 
     @Override
     public void start() {
-        executorService = Executors.newScheduledThreadPool(1);
+        executorService = createExecutorService();
         schedulePoll();
     }
     
     @Override
     public void stop() {
         executorService.shutdown();
+        executorService = null;
+    }
+    
+    ScheduledExecutorService createExecutorService() {
+        return Executors.newScheduledThreadPool(1);
     }
     
     protected abstract Object processOnePoll();
