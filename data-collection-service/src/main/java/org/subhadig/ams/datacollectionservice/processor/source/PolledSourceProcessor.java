@@ -2,6 +2,7 @@ package org.subhadig.ams.datacollectionservice.processor.source;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.subhadig.ams.datacollectionservice.config.source.PolledSourceConfig;
@@ -10,11 +11,11 @@ public abstract class PolledSourceProcessor extends SourceProcessor {
     
     ScheduledExecutorService executorService;
     
-    public PolledSourceProcessor() {
-    }
-
+    ScheduledFuture<?> scheduledFuture;
+    
     @Override
     public void start() {
+        LOGGER.info("Starting the polling");
         executorService = createExecutorService();
         schedulePoll();
     }
@@ -32,16 +33,17 @@ public abstract class PolledSourceProcessor extends SourceProcessor {
     protected abstract Object processOnePoll();
     
     private void schedulePoll() {
-        executorService.schedule( new PollThread() , 
-                                  ((PolledSourceConfig) config).getPollInterval(), 
-                                  TimeUnit.MILLISECONDS);
+        scheduledFuture = executorService.schedule( new PollThread() , 
+                                                    ((PolledSourceConfig) config).getPollInterval(), 
+                                                    TimeUnit.MILLISECONDS);
     }
     
-    private class PollThread implements Runnable {
+    class PollThread implements Runnable {
         
         @Override
         public void run() {
-            if( queue.offer( processOnePoll() ) ) {
+            LOGGER.info("Processing one poll");
+            if( !queue.offer( processOnePoll() ) ) {
                 LOGGER.warn("Unable to push to queue");
             }
             schedulePoll();
