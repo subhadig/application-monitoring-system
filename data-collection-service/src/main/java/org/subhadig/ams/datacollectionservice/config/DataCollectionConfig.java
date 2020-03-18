@@ -1,5 +1,7 @@
 package org.subhadig.ams.datacollectionservice.config;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.subhadig.ams.datacollectionservice.config.destination.DestinationType;
@@ -20,7 +22,7 @@ public class DataCollectionConfig {
     
     private SourceType source;
     
-    private DestinationType destination;
+    private List<DestinationType> destinations;
     
     private SourceConfig sourceConfig;
 
@@ -44,12 +46,12 @@ public class DataCollectionConfig {
         this.source = source;
     }
 
-    public DestinationType getDestination() {
-        return destination;
+    public List<DestinationType> getDestinations() {
+        return destinations;
     }
 
-    public void setDestination(DestinationType destination) {
-        this.destination = destination;
+    public void setDestinations(List<DestinationType> destinations) {
+        this.destinations = destinations;
     }
 
     public SourceConfig getSourceConfig() {

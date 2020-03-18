@@ -4,17 +4,14 @@ import java.util.concurrent.BlockingQueue;
 
 public abstract class DestinationProcessor {
 
-    protected BlockingQueue<Object> queue;
+    protected final BlockingQueue<Object> queue;
     
+    public DestinationProcessor(BlockingQueue<Object> queue) {
+        super();
+        this.queue = queue;
+    }
+
     public abstract void start();
     
     public abstract void stop();
-
-    public BlockingQueue<Object> getQueue() {
-        return queue;
-    }
-
-    public void setQueue(BlockingQueue<Object> queue) {
-        this.queue = queue;
-    }
 }

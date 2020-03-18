@@ -12,6 +12,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.subhadig.ams.datacollectionservice.config.source.SourceConfig;
 import org.subhadig.ams.datacollectionservice.config.source.SpringActuatorSourceConfig;
 
 public class PolledSourceProcessorTest {
@@ -25,13 +26,12 @@ public class PolledSourceProcessorTest {
     
     @BeforeEach
     public void setup() {
-        processor = spy(new TestPolledSourceProcessor());
         SpringActuatorSourceConfig config = new SpringActuatorSourceConfig();
         config.setPollInterval(POLL_INTERVAL);
-        processor.setConfig(config);
         
         queue = new LinkedBlockingQueue<Object>();
-        processor.setQueue(queue);
+        
+        processor = spy(new TestPolledSourceProcessor(queue, config));
     }
     
     @Test
@@ -86,6 +86,10 @@ public class PolledSourceProcessorTest {
     }
     
     private static class TestPolledSourceProcessor extends PolledSourceProcessor {
+
+        public TestPolledSourceProcessor(BlockingQueue<Object> queue, SourceConfig config) {
+            super(queue, config);
+        }
 
         @Override
         protected Object processOnePoll() {
