@@ -1,5 +1,9 @@
 package org.subhadig.ams.datacollectionservice.config.source;
 
-public abstract class SourceConfig {
+import java.io.Serializable;
+
+public abstract class SourceConfig implements Serializable {
+
+    private static final long serialVersionUID = -2922173321265665602L;
 
 }

@@ -5,6 +5,10 @@ package org.subhadig.ams.datacollectionservice.config.source;
  *
  */
 public class SpringActuatorSourceConfig extends PolledSourceConfig {
+    
+    private static final long serialVersionUID = -7763669962064300790L;
+
+    private String protocol;
 
     private String ipAddress;
     
@@ -13,6 +17,14 @@ public class SpringActuatorSourceConfig extends PolledSourceConfig {
     private String userName;
     
     private String password;
+
+    public String getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
 
     public String getIpAddress() {
         return ipAddress;
