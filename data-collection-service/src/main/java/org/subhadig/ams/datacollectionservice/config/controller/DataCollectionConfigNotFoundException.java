@@ -1,4 +1,4 @@
-package org.subhadig.ams.datacollectionservice.config;
+package org.subhadig.ams.datacollectionservice.config.controller;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;

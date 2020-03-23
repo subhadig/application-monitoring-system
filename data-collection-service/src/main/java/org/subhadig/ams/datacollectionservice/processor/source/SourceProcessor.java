@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.subhadig.ams.datacollectionservice.common.ServiceDefinitions;
-import org.subhadig.ams.datacollectionservice.config.source.SourceConfig;
+import org.subhadig.ams.datacollectionservice.config.DataCollectionConfig;
 
 public abstract class SourceProcessor {
     
@@ -13,9 +13,9 @@ public abstract class SourceProcessor {
 
     protected final BlockingQueue<Object> queue;
     
-    protected final SourceConfig config;
+    protected final DataCollectionConfig config;
     
-    public SourceProcessor(BlockingQueue<Object> queue, SourceConfig config) {
+    public SourceProcessor(BlockingQueue<Object> queue, DataCollectionConfig config) {
         this.queue = queue;
         this.config = config;
     }

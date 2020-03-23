@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.subhadig.ams.datacollectionservice.config.DataCollectionConfig;
 import org.subhadig.ams.datacollectionservice.config.source.PolledSourceConfig;
-import org.subhadig.ams.datacollectionservice.config.source.SourceConfig;
 
 public abstract class PolledSourceProcessor extends SourceProcessor {
 
@@ -21,7 +21,7 @@ public abstract class PolledSourceProcessor extends SourceProcessor {
     
     private static final int TIMEOUT_IN_MS = 5000;
     
-    public PolledSourceProcessor(BlockingQueue<Object> queue, SourceConfig config) {
+    public PolledSourceProcessor(BlockingQueue<Object> queue, DataCollectionConfig config) {
         super(queue, config);
     }
     
@@ -69,6 +69,7 @@ public abstract class PolledSourceProcessor extends SourceProcessor {
                 LOGGER.info("Stopping polling");
                 if(scheduledFuture != null) {
                     scheduledFuture.cancel(true);
+                    scheduledFuture = null;
                 }
                 executorService.shutdown();
                 executorService = null;
@@ -86,7 +87,7 @@ public abstract class PolledSourceProcessor extends SourceProcessor {
     
     private void schedulePoll() {
         scheduledFuture = executorService.schedule( new PollThread() , 
-                                                    ((PolledSourceConfig) config).getPollInterval(), 
+                                                    ((PolledSourceConfig) config.getSourceConfig()).getPollInterval(), 
                                                     TimeUnit.MILLISECONDS);
     }
     
