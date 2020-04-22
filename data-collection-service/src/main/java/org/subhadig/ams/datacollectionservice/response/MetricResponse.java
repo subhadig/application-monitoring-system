@@ -15,4 +15,9 @@ public class MetricResponse extends Response {
     public Map<String, Object> getMetricsMap() {
         return metricsMap;
     }
+    
+    @Override
+    public String toString() {
+        return metricsMap.toString();
+    }
 }

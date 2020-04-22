@@ -17,7 +17,7 @@ import org.subhadig.ams.datacollectionservice.config.source.SpringActuatorSource
 
 public class PolledSourceProcessorTest {
 
-    private PolledSourceProcessor processor;
+    private PolledSourceProcessor<?> processor;
     
     private BlockingQueue<Object> queue;
     
@@ -29,6 +29,7 @@ public class PolledSourceProcessorTest {
         SpringActuatorSourceConfig sourceConfig = new SpringActuatorSourceConfig();
         sourceConfig.setPollInterval(POLL_INTERVAL);
         DataCollectionConfig config = new DataCollectionConfig();
+        config.setSourceConfig(sourceConfig);
         
         queue = new LinkedBlockingQueue<>();
         
@@ -87,7 +88,7 @@ public class PolledSourceProcessorTest {
         assertNull(processor.scheduledFuture);
     }
     
-    private static class TestPolledSourceProcessor extends PolledSourceProcessor {
+    private static class TestPolledSourceProcessor extends PolledSourceProcessor<Object> {
 
         public TestPolledSourceProcessor(BlockingQueue<Object> queue, DataCollectionConfig config) {
             super(queue, config);

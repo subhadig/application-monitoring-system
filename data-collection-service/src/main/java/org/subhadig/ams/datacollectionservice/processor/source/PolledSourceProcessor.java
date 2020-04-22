@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.subhadig.ams.datacollectionservice.config.DataCollectionConfig;
 import org.subhadig.ams.datacollectionservice.config.source.PolledSourceConfig;
 
-public abstract class PolledSourceProcessor extends SourceProcessor {
+public abstract class PolledSourceProcessor<T> extends SourceProcessor {
 
     ScheduledExecutorService executorService;
     
@@ -83,7 +83,7 @@ public abstract class PolledSourceProcessor extends SourceProcessor {
         return Executors.newScheduledThreadPool(1);
     }
     
-    protected abstract Object processOnePoll();
+    protected abstract T processOnePoll();
     
     private void schedulePoll() {
         scheduledFuture = executorService.schedule( new PollThread() , 

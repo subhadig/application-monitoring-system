@@ -2,12 +2,14 @@ package org.subhadig.ams.datacollectionservice.processor.destination;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.awaitility.Awaitility.*;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,8 @@ public class DestinationProcessorTest {
         
         destinationProcessor.start();
         
+        await().atLeast(2, TimeUnit.SECONDS);
+        
         assertEquals(executorService, destinationProcessor.executorService);
         ArgumentCaptor<Object> captor = ArgumentCaptor.forClass(Object.class);
         verify(destinationProcessor).processOne(captor.capture());
@@ -51,6 +55,8 @@ public class DestinationProcessorTest {
     
     private void testRunning() {
         queue.add(ELEMENT_OBJECT);
+        
+        await().atLeast(2, TimeUnit.SECONDS);
         
         ArgumentCaptor<Object> captor = ArgumentCaptor.forClass(Object.class);
         verify(destinationProcessor, times(2)).processOne(captor.capture());
