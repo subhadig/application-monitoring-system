@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.subhadig.ams.datacollectionservice.config.DataCollectionConfig;
-import org.subhadig.ams.datacollectionservice.config.DataCollectionConfigRepository;
+import org.subhadig.ams.datacollectionservice.config.repository.DataCollectionConfigRepository;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

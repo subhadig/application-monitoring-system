@@ -2,7 +2,8 @@ package org.subhadig.ams.datacollectionservice.processor.destination;
 
 import java.util.concurrent.BlockingQueue;
 
-import org.subhadig.ams.datacollectionservice.config.DataCollectionConfigRepository;
+import org.subhadig.ams.datacollectionservice.response.Response;
+import org.subhadig.ams.datacollectionservice.response.repository.ResponseRepository;
 
 /**
  * Class for pushing result objects to MongoDB.
@@ -11,15 +12,15 @@ import org.subhadig.ams.datacollectionservice.config.DataCollectionConfigReposit
  */
 public class MongoDBDestinationProcessor extends DestinationProcessor {
     
-    private final DataCollectionConfigRepository configRepository;
+    private final ResponseRepository responseRepository;
 
-    public MongoDBDestinationProcessor(BlockingQueue<Object> queue, DataCollectionConfigRepository configRepository) {
+    public MongoDBDestinationProcessor(BlockingQueue<Object> queue, ResponseRepository responseRepository) {
         super(queue);
-        this.configRepository = configRepository;
+        this.responseRepository = responseRepository;
     }
 
     @Override
     protected void processOne(Object o) {
-        // TODO Auto-generated method stub
+        responseRepository.save((Response) o);
     }
 }

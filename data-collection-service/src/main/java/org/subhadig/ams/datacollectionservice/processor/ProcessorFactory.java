@@ -6,13 +6,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.subhadig.ams.datacollectionservice.config.DataCollectionConfig;
-import org.subhadig.ams.datacollectionservice.config.DataCollectionConfigRepository;
 import org.subhadig.ams.datacollectionservice.config.destination.DestinationType;
 import org.subhadig.ams.datacollectionservice.config.source.SourceType;
 import org.subhadig.ams.datacollectionservice.processor.destination.DestinationProcessor;
 import org.subhadig.ams.datacollectionservice.processor.destination.MongoDBDestinationProcessor;
 import org.subhadig.ams.datacollectionservice.processor.source.SourceProcessor;
 import org.subhadig.ams.datacollectionservice.processor.source.SpringActuatorSourceProcessor;
+import org.subhadig.ams.datacollectionservice.response.repository.ResponseRepository;
 
 /**
  * A factory class for {@link Processor}
@@ -25,7 +25,7 @@ public class ProcessorFactory {
     private static final int MAX_QUEUE_CAPACITY = 150;
     
     @Autowired
-    private DataCollectionConfigRepository configRepository;
+    private ResponseRepository responseRepository;
 
     public Processor createProcessor(DataCollectionConfig config) {
         
@@ -45,7 +45,7 @@ public class ProcessorFactory {
     
     private DestinationProcessor createDestinationProcessor(DestinationType destinationType, BlockingQueue<Object> queue) {
         if(destinationType == DestinationType.Database) {
-            return new MongoDBDestinationProcessor(queue, configRepository);
+            return new MongoDBDestinationProcessor(queue, responseRepository);
         } else {
             throw new IllegalArgumentException("Unknown source type.");
         }
