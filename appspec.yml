@@ -1,0 +1,39 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /tmp
+hooks:
+  # before the application revision is downloaded
+  # gracefully stop the current application or remove currently installed packages
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 300
+      runas: root
+  
+  # after new files are downloaded in codedeploy tmp folder, use this for preinstall tasks
+  # such as install dependencies, decrypting files and creating a backup
+  # can't run scripts against codedeploy tmp folder
+  BeforeInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: root
+
+  # after files are copied to your destination folder, use this for setting some env vars or
+  # changing file permissions, or creating some directories
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
+      runas: root
+  
+  # use this to start application with latest version files
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 300
+      runas: root
+  
+  # use this to validate if app started correctly such as curl GET /index.html is 200
+  # or service status 
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 300
