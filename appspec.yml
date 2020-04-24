@@ -8,7 +8,7 @@ hooks:
   # gracefully stop the current application or remove currently installed packages
   ApplicationStop:
     - location: scripts/stop.sh
-      timeout: 300
+      timeout: 10
       runas: root
   
   # after new files are downloaded in codedeploy tmp folder, use this for preinstall tasks
@@ -16,24 +16,24 @@ hooks:
   # can't run scripts against codedeploy tmp folder
   BeforeInstall:
     - location: scripts/before_install.sh
-      timeout: 300
+      timeout: 10
       runas: root
 
   # after files are copied to your destination folder, use this for setting some env vars or
   # changing file permissions, or creating some directories
   AfterInstall:
     - location: scripts/after_install.sh
-      timeout: 300
+      timeout: 10
       runas: root
   
   # use this to start application with latest version files
   ApplicationStart:
     - location: scripts/start.sh
-      timeout: 300
+      timeout: 30
       runas: root
   
   # use this to validate if app started correctly such as curl GET /index.html is 200
   # or service status 
   ValidateService:
     - location: scripts/validate.sh
-      timeout: 300
+      timeout: 10
