@@ -11,10 +11,12 @@ phases:
     commands:
       - echo Build started on `date`
       - cd data-provider-service
-      - mvn install
+      - mvn install --quiet
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
   files:
     - data-provider-service/target/data-provider-service-0.0.1-SNAPSHOT.jar
+    - appspec.yml
+    - scripts/*
