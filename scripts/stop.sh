@@ -1,3 +1,5 @@
 #!/bin/bash
-killall java
-
+isAppRunning = `pgrep java`
+if [[ -n  $isAppRunning ]]; then
+    killall java
+fi
