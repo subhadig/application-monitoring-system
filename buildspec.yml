@@ -17,4 +17,4 @@ phases:
       - echo Build completed on `date`
 artifacts:
   files:
-    - target/data-provider-service-0.0.1-SNAPSHOT.jar
+    - data-provider-service/target/data-provider-service-0.0.1-SNAPSHOT.jar
