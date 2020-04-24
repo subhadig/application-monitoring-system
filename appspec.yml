@@ -7,7 +7,7 @@ hooks:
   # before the application revision is downloaded
   # gracefully stop the current application or remove currently installed packages
   ApplicationStop:
-    - location: scripts/stop_server.sh
+    - location: scripts/stop.sh
       timeout: 300
       runas: root
   
@@ -15,7 +15,7 @@ hooks:
   # such as install dependencies, decrypting files and creating a backup
   # can't run scripts against codedeploy tmp folder
   BeforeInstall:
-    - location: scripts/install_dependencies.sh
+    - location: scripts/before_install.sh
       timeout: 300
       runas: root
 
@@ -28,12 +28,12 @@ hooks:
   
   # use this to start application with latest version files
   ApplicationStart:
-    - location: scripts/start_server.sh
+    - location: scripts/start.sh
       timeout: 300
       runas: root
   
   # use this to validate if app started correctly such as curl GET /index.html is 200
   # or service status 
   ValidateService:
-    - location: scripts/validate_service.sh
+    - location: scripts/validate.sh
       timeout: 300
