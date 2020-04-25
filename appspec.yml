@@ -24,7 +24,7 @@ hooks:
   # can't run scripts against codedeploy tmp folder
   BeforeInstall:
     - location: scripts/before_install.sh
-      timeout: 10
+      timeout: 60
       runas: ec2-user
 
   # after files are copied to your destination folder, use this for setting some env vars or
