@@ -24,7 +24,7 @@
   "destination": "Database",
   "source": "SpringActuator",
   "sourceConfig": {
-	"pollInterval": 60000,
+	"pollInterval": 60,
 	"protocol": "http",
 	"ipAddress": "provider",
 	"port": 8080,

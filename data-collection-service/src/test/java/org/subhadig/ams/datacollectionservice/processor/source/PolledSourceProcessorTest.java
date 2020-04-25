@@ -22,7 +22,7 @@ public class PolledSourceProcessorTest {
     private BlockingQueue<Object> queue;
     
     private static final String RETURNED_OBJECT = "returned_object";
-    private static final long POLL_INTERVAL = 500l;
+    private static final long POLL_INTERVAL = 1l;
     
     @BeforeEach
     public void setup() {

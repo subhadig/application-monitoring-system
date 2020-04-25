@@ -107,7 +107,7 @@ public abstract class PolledSourceProcessor<T> extends SourceProcessor {
             LOGGER.info("Scheduling poll.");
             scheduledFuture = executorService.schedule( new PollThread() , 
                                                         ((PolledSourceConfig) config.getSourceConfig()).getPollInterval(), 
-                                                        TimeUnit.MILLISECONDS);
+                                                        TimeUnit.SECONDS);
         }
     }
     
