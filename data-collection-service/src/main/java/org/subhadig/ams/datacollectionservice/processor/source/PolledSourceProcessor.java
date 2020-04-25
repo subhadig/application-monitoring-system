@@ -5,12 +5,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.subhadig.ams.datacollectionservice.config.DataCollectionConfig;
 import org.subhadig.ams.datacollectionservice.config.source.PolledSourceConfig;
 
+/**
+ * @author subhadig@github
+ */
 public abstract class PolledSourceProcessor<T> extends SourceProcessor {
 
     ScheduledExecutorService executorService;
@@ -21,16 +25,18 @@ public abstract class PolledSourceProcessor<T> extends SourceProcessor {
     
     private static final int TIMEOUT_IN_MS = 5000;
     
+    private static final AtomicInteger THREAD_COUNTER = new AtomicInteger(1);
+    
     public PolledSourceProcessor(BlockingQueue<Object> queue, DataCollectionConfig config) {
         super(queue, config);
     }
     
     @Override
-    public void start() {
+    public boolean start() {
         try {
             if(!lock.tryLock(TIMEOUT_IN_MS, TimeUnit.MILLISECONDS)) {
                 LOGGER.error("Unable to acquire lock.");
-                return;
+                return false;
             }
         } catch (InterruptedException e) {
             LOGGER.warn("Interrupted while waiting for lock");
@@ -48,14 +54,15 @@ public abstract class PolledSourceProcessor<T> extends SourceProcessor {
         } finally {
             lock.unlock();
         }
+        return true;
     }
     
     @Override
-    public void stop() {
+    public boolean stop() {
         try {
             if(!lock.tryLock(TIMEOUT_IN_MS, TimeUnit.MILLISECONDS)) {
                 LOGGER.error("Unable to acquire lock.");
-                return;
+                return false;
             }
         } catch (InterruptedException e) {
             LOGGER.warn("Interrupted while waiting for lock");
@@ -72,23 +79,36 @@ public abstract class PolledSourceProcessor<T> extends SourceProcessor {
                     scheduledFuture = null;
                 }
                 executorService.shutdown();
+                try {
+                    if(executorService.awaitTermination(10, TimeUnit.SECONDS)) {
+                        LOGGER.info("Source executor service did not shutdown normally. Forcing shutdown.");
+                        executorService.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    LOGGER.info("Interrupted while waiting for temination of executor service.");
+                    Thread.currentThread().interrupt();
+                }
                 executorService = null;
             }
         } finally {
             lock.unlock();
         }
+        return true;
     }
     
     ScheduledExecutorService createExecutorService() {
-        return Executors.newScheduledThreadPool(1);
+        return Executors.newScheduledThreadPool(1, r -> new Thread(r, "source-thread-" + THREAD_COUNTER.getAndIncrement()));
     }
     
     protected abstract T processOnePoll();
     
     private void schedulePoll() {
-        scheduledFuture = executorService.schedule( new PollThread() , 
-                                                    ((PolledSourceConfig) config.getSourceConfig()).getPollInterval(), 
-                                                    TimeUnit.MILLISECONDS);
+        if(executorService != null) {
+            LOGGER.info("Scheduling poll.");
+            scheduledFuture = executorService.schedule( new PollThread() , 
+                                                        ((PolledSourceConfig) config.getSourceConfig()).getPollInterval(), 
+                                                        TimeUnit.SECONDS);
+        }
     }
     
     class PollThread implements Runnable {

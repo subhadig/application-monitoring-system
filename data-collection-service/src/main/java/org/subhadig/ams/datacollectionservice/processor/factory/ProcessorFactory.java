@@ -1,4 +1,4 @@
-package org.subhadig.ams.datacollectionservice.processor;
+package org.subhadig.ams.datacollectionservice.processor.factory;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.subhadig.ams.datacollectionservice.config.DataCollectionConfig;
 import org.subhadig.ams.datacollectionservice.config.destination.DestinationType;
 import org.subhadig.ams.datacollectionservice.config.source.SourceType;
+import org.subhadig.ams.datacollectionservice.processor.Processor;
 import org.subhadig.ams.datacollectionservice.processor.destination.DestinationProcessor;
 import org.subhadig.ams.datacollectionservice.processor.destination.MongoDBDestinationProcessor;
 import org.subhadig.ams.datacollectionservice.processor.source.SourceProcessor;

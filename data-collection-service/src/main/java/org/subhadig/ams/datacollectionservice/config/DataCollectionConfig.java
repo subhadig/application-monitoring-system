@@ -2,9 +2,12 @@ package org.subhadig.ams.datacollectionservice.config;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.subhadig.ams.datacollectionservice.config.deserializer.DataCollectionConfigDeserializer;
 import org.subhadig.ams.datacollectionservice.config.destination.DestinationType;
 import org.subhadig.ams.datacollectionservice.config.source.SourceConfig;
 import org.subhadig.ams.datacollectionservice.config.source.SourceType;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * This class holds the DataCollection
@@ -12,7 +15,8 @@ import org.subhadig.ams.datacollectionservice.config.source.SourceType;
  * 
  * @author subhadig@github
  */
-@Document("data-collection-config")
+@Document("data-collection-configs")
+@JsonDeserialize(using = DataCollectionConfigDeserializer.class)
 public class DataCollectionConfig {
     
     @Id

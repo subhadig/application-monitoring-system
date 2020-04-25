@@ -1,7 +1,9 @@
 package org.subhadig.ams.datacollectionservice.config.controller;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +12,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.subhadig.ams.datacollectionservice.config.DataCollectionConfig;
 import org.subhadig.ams.datacollectionservice.config.repository.DataCollectionConfigRepository;
+import org.subhadig.ams.datacollectionservice.processor.manager.ProcessorManager;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +36,9 @@ public class DataCollectionConfigController {
     
     @Autowired
     private DataCollectionConfigRepository configRepository;
+    
+    @Autowired
+    private ProcessorManager processorManager;
 
     @GetMapping("")
     @ApiOperation("Get all DataCollectionConfigurations")
@@ -53,6 +60,8 @@ public class DataCollectionConfigController {
     public ResponseEntity<String> createConfig(@RequestBody DataCollectionConfig config) {
         DataCollectionConfig savedConfig = configRepository.save(config);
         
+        processorManager.addNewProcessor(savedConfig);
+        
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                                                   .path("/{id}")
                                                   .buildAndExpand(savedConfig.getId())
@@ -67,6 +76,44 @@ public class DataCollectionConfigController {
             return ResponseEntity.badRequest().build();
         }
         configRepository.deleteById(id);
+        processorManager.stopProcessor(id);
+        
         return ResponseEntity.accepted().build();
+    }
+    
+    @GetMapping("/{id}/status")
+    @ApiOperation("Get DataCollectionConfiguration status")
+    public ResponseEntity<Map<String,String>> getConfigStatus(@PathVariable("id") String id) {
+        if(id == null || !configRepository.findById(id).isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+        String status = processorManager.getProcessorStatus(id) ? "Running" : "Stopped";
+        Map<String, String> responseMap = new HashMap<>();
+        responseMap.put("status", status);
+        return ResponseEntity.ok(responseMap);
+    }
+    
+    @PutMapping("/{id}/status/{status}")
+    @ApiOperation("Update DataCollectionConfiguration status")
+    public ResponseEntity<Object> updateConfigStatus(@PathVariable("id") String id, @PathVariable("status") Status status) {
+        if(status == null || id == null || !configRepository.findById(id).isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+        
+        boolean responseStatus;
+        if(status == Status.START) {
+            responseStatus = processorManager.startProcessor(id);
+        } else {
+            responseStatus = processorManager.stopProcessor(id);
+        }
+        if(responseStatus) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    public enum Status {
+        START, STOP
     }
 }

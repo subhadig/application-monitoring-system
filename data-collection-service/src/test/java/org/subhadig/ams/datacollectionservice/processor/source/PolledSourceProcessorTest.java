@@ -22,7 +22,7 @@ public class PolledSourceProcessorTest {
     private BlockingQueue<Object> queue;
     
     private static final String RETURNED_OBJECT = "returned_object";
-    private static final long POLL_INTERVAL = 500l;
+    private static final long POLL_INTERVAL = 1l;
     
     @BeforeEach
     public void setup() {
@@ -47,7 +47,7 @@ public class PolledSourceProcessorTest {
         ScheduledExecutorService mockExecutorService = spy(Executors.newScheduledThreadPool(1));
         doReturn(mockExecutorService).when(processor).createExecutorService();
         
-        processor.start();
+        assertTrue(processor.start());
         
         assertEquals(mockExecutorService, processor.executorService);
         ArgumentCaptor<Long> intervalCaptor = ArgumentCaptor.forClass(Long.class);
@@ -81,7 +81,7 @@ public class PolledSourceProcessorTest {
     private void testStop() {
         ScheduledExecutorService executor = processor.executorService;
         
-        processor.stop();
+        assertTrue(processor.stop());
         
         assertTrue(executor.isShutdown());
         assertNull(processor.executorService);
