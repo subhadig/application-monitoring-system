@@ -1,8 +1,7 @@
 # Data Collector Service
-- It is a polling based collector. It currently supports polling for data-provider-service.
-- It has a losely coupled design that makes it very easy to enhance it for other type of poll or push based data collections.
-- The data-collection-configs can be stored/deleted.
-- The data collection for a saved data-collection-configs can be started/stopped.
+- It currently supports collecting metrics from application exposing Spring Actuator *health* and *metrics* APIs.
+- The *data-collection-configs* can be stored/deleted. Data collection starts as soon as a config is stored.
+- The data collection for a saved *data-collection-config* can be started/stopped.
 - It also uses the Spring Security module to secure the exposed REST end points.
 
 ## REST endpoints
@@ -27,8 +26,8 @@
   "sourceConfig": {
 	"pollInterval": 60000,
 	"protocol": "http",
-	"ipAddress": "localhost",
-	"port": 8081,
+	"ipAddress": "provider",
+	"port": 8080,
 	"userName": "admin",
 	"password": "admin"
   }

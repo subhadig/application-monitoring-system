@@ -81,7 +81,7 @@ public abstract class PolledSourceProcessor<T> extends SourceProcessor {
                 executorService.shutdown();
                 try {
                     if(executorService.awaitTermination(10, TimeUnit.SECONDS)) {
-                        LOGGER.info("Source executor service did not shutdown normally.");
+                        LOGGER.info("Source executor service did not shutdown normally. Forcing shutdown.");
                         executorService.shutdownNow();
                     }
                 } catch (InterruptedException e) {
