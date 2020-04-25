@@ -1,15 +1,23 @@
 version: 0.0
 os: linux
+
 files:
   - source: /
     destination: /tmp
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ec2-user
+    group: ec2-user
+    
 hooks:
   # before the application revision is downloaded
   # gracefully stop the current application or remove currently installed packages
   ApplicationStop:
     - location: scripts/stop.sh
       timeout: 10
-      runas: root
+      runas: ec2-user
   
   # after new files are downloaded in codedeploy tmp folder, use this for preinstall tasks
   # such as install dependencies, decrypting files and creating a backup
@@ -37,3 +45,4 @@ hooks:
   ValidateService:
     - location: scripts/validate.sh
       timeout: 10
+      runas: ec2-user
