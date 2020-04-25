@@ -1,20 +1,42 @@
 # Data Collector Service
-- It uses the Spring Actuator module to generate runtime metrics
-and exposes over REST. Protocol used is HTTP.
+- It is a polling based collector. It currently supports polling for data-provider-service.
+- It has a losely coupled design that makes it very easy to enhance it for other type of poll or push based data collections.
+- The data-collection-configs can be stored/deleted.
+- The data collection for a saved data-collection-configs can be started/stopped.
 - It also uses the Spring Security module to secure the exposed REST end points.
 
 ## REST endpoints
-- Swagger UI 			-> http://localhost:8080/swagger-ui.html#/
-- Retrieve all configs 	-> GET http://localhost:8080/data-collection-configs
-- Save a configs 		-> POST http://localhost:8080/data-collection-configs
-- Update a configs 		-> PUT http://localhost:8080/data-collection-configs
+- Swagger UI 				-> http://localhost:8080/swagger-ui.html
+- Retrieve all configs 		-> GET http://localhost:8080/data-collection-configs
+- Save or update a config	-> POST http://localhost:8080/data-collection-configs
+- Retrieve config by id		-> GET http://localhost:8080/data-collection-configs/{id}
+- Delete a config 			-> DELETE http://localhost:8080/data-collection-configs
+- Get config status			-> GET http://localhost:8080/data-collection-configs/{id}/status
+- Update config status		-> PUT http://localhost:8080/data-collection-configs/{id}/status/{status}
 
 ### Default credentials
 - username: admin
 - password: admin
 
+### Save Config payload
+```json
+{
+  "description": "Test",
+  "destination": "Database",
+  "source": "SpringActuator",
+  "sourceConfig": {
+	"pollInterval": 60000,
+	"protocol": "http",
+	"ipAddress": "localhost",
+	"port": 8081,
+	"userName": "admin",
+	"password": "admin"
+  }
+}
+```
+
 ## Packaging
 mvn package
 
 ## Running
-docker run -d --rm -p 8080:8080 --name simulator data-simulator-service:0.0.1-SNAPSHOT
+docker run -d --rm -p 8080:8080 --name collector data-collector-service:0.0.1-SNAPSHOT

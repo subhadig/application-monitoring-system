@@ -20,7 +20,7 @@ public abstract class SourceProcessor {
         this.config = config;
     }
 
-    public abstract void start();
+    public abstract boolean start();
     
-    public abstract void stop();
+    public abstract boolean stop();
 }

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  * @author subhadig@github
  */
-@Document("data-collection-config")
+@Document("responses")
 public class Response {
     
     @Id
@@ -17,6 +17,8 @@ public class Response {
     private String applicationId;
     
     private String appliationDescription;
+    
+    private long timestamp;
 
     public String getId() {
         return id;
@@ -40,5 +42,13 @@ public class Response {
 
     public void setAppliationDescription(String appliationDescription) {
         this.appliationDescription = appliationDescription;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

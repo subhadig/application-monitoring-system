@@ -41,7 +41,7 @@ public class DestinationProcessorTest {
         doReturn(executorService).when(destinationProcessor).createExecutorService();
         queue.add(ELEMENT_OBJECT);
         
-        destinationProcessor.start();
+        assertTrue(destinationProcessor.start());
         
         await().atLeast(2, TimeUnit.SECONDS);
         
@@ -69,7 +69,7 @@ public class DestinationProcessorTest {
         ExecutorService executorService = destinationProcessor.executorService;
         Future<?> future = destinationProcessor.future;
         
-        destinationProcessor.stop();
+        assertTrue(destinationProcessor.stop());
         
         assertNull(destinationProcessor.executorService);
         assertNull(destinationProcessor.future);

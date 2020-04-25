@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,6 +22,8 @@ public abstract class DestinationProcessor {
     
     protected static final Logger LOGGER = LoggerFactory.getLogger(ServiceDefinitions.DESTINATION_PROCESSOR);
     
+    private static final AtomicInteger THREAD_COUNTER = new AtomicInteger(1);
+    
     private static final int TIMEOUT_IN_MS = 5000;
 
     protected final BlockingQueue<Object> queue;
@@ -32,15 +35,14 @@ public abstract class DestinationProcessor {
     private Lock lock = new ReentrantLock();
     
     public DestinationProcessor(BlockingQueue<Object> queue) {
-        super();
         this.queue = queue;
     }
 
-    public void start() {
+    public boolean start() {
         try {
             if(!lock.tryLock(TIMEOUT_IN_MS, TimeUnit.MILLISECONDS)) {
                 LOGGER.error("Unable to acquire lock.");
-                return;
+                return false;
             }
         } catch (InterruptedException e) {
             LOGGER.warn("Interrupted while waiting for lock");
@@ -56,13 +58,14 @@ public abstract class DestinationProcessor {
         } finally {
             lock.unlock();
         }
+        return true;
     }
     
-    public void stop() {
+    public boolean stop() {
         try {
             if(!lock.tryLock(TIMEOUT_IN_MS, TimeUnit.MILLISECONDS)) {
                 LOGGER.error("Unable to acquire lock.");
-                return;
+                return false;
             }
         } catch (InterruptedException e) {
             LOGGER.warn("Interrupted while waiting for lock");
@@ -72,6 +75,7 @@ public abstract class DestinationProcessor {
             if(executorService == null) {
                 LOGGER.warn("Already stopped.");
             } else {
+                LOGGER.info("Stopping destination processor thread");
                 if(future != null) {
                     future.cancel(true);
                     future = null;
@@ -83,10 +87,11 @@ public abstract class DestinationProcessor {
         } finally {
             lock.unlock();
         }
+        return true;
     }
     
     ExecutorService createExecutorService() {
-        return Executors.newSingleThreadExecutor();
+        return Executors.newSingleThreadExecutor(r -> new Thread(r, "dest-thread-" + THREAD_COUNTER.getAndIncrement()));
     }
     
     protected abstract void processOne(Object o);
@@ -99,7 +104,7 @@ public abstract class DestinationProcessor {
                 try {
                     processOne(queue.take());
                 } catch (InterruptedException e) {
-                    LOGGER.warn("Interrupted while waiting for elements", e);
+                    LOGGER.debug("Interrupted while waiting for elements", e);
                     Thread.currentThread().interrupt();
                 }
             }
