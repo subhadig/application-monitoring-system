@@ -9,7 +9,7 @@ hooks:
   ApplicationStop:
     - location: scripts/stop.sh
       timeout: 10
-      runas: ec2-user
+      runas: root
   
   # after new files are downloaded in codedeploy tmp folder, use this for preinstall tasks
   # such as install dependencies, decrypting files and creating a backup
