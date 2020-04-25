@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
@@ -26,8 +27,13 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("Data Collection Service API")
+                .description("API documentation for Data Collection Service")
+                .build();
+        
         return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(ApiInfo.DEFAULT)
+                .apiInfo(apiInfo)
                 .produces(DEFAULT_PRODUCES_AND_CONSUMES)
                 .consumes(DEFAULT_PRODUCES_AND_CONSUMES)
                 .select()
