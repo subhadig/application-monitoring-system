@@ -4,6 +4,7 @@ log()
 {
     echo "\n[start-all] $1"
 }
+
 log "Creating network ams-net"
 docker network create ams-net
 
