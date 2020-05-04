@@ -1,2 +1,2 @@
-FROM elasticsearch:7.6.2
+FROM logstash:7.6.2
 MAINTAINER subhadig@github
