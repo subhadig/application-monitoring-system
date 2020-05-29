@@ -1,5 +1,5 @@
 # Data Ingestion Service
-- Docker container running an Logstash instance.
+- Docker container running a Logstash instance.
 
 # Packaging
 docker build -t analytics-service:latest .
